@@ -8,6 +8,7 @@ import {
 	type Texture,
 	type Transform,
 	type TransformContext,
+	type TypedArray,
 	type vec2,
 } from '@gltf-transform/core';
 import type { NdArray } from 'ndarray';
@@ -231,6 +232,26 @@ export function shallowCloneAccessor(document: Document, accessor: Accessor): Ac
 		.setBuffer(accessor.getBuffer())
 		.setNormalized(accessor.getNormalized())
 		.setSparse(accessor.getSparse());
+}
+
+/**
+ * Copies one vertex — all components of a single element, such as a position,
+ * texture coordinate, or normal — from `srcIndex` in `srcArray` to `dstIndex`
+ * in `dstArray`. Both arrays must have the same element size.
+ * @hidden
+ */
+export function copyVertex(
+	srcArray: TypedArray,
+	srcIndex: number,
+	dstArray: TypedArray,
+	dstIndex: number,
+	elementSize: number,
+): void {
+	const srcOffset = srcIndex * elementSize;
+	const dstOffset = dstIndex * elementSize;
+	for (let j = 0; j < elementSize; j++) {
+		dstArray[dstOffset + j] = srcArray[srcOffset + j];
+	}
 }
 
 /** @hidden */

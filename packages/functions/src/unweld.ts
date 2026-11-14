@@ -5,7 +5,7 @@ import {
 	type Transform,
 	type TypedArrayConstructor,
 } from '@gltf-transform/core';
-import { createTransform, formatDeltaOp, shallowCloneAccessor } from './utils.js';
+import { copyVertex, createTransform, formatDeltaOp, shallowCloneAccessor } from './utils.js';
 
 const NAME = 'unweld';
 
@@ -95,9 +95,7 @@ function unweldAttribute(
 	const indicesArray = indices.getArray()!;
 	const elementSize = srcAttribute.getElementSize();
 	for (let i = 0, il = indices.getCount(); i < il; i++) {
-		for (let j = 0; j < elementSize; j++) {
-			dstArray[i * elementSize + j] = srcArray[indicesArray[i] * elementSize + j];
-		}
+		copyVertex(srcArray, indicesArray[i], dstArray, i, elementSize);
 	}
 
 	if (!visited.has(srcAttribute)) visited.set(srcAttribute, new Map());

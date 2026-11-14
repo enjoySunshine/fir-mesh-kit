@@ -7,7 +7,7 @@ import {
 } from '@gltf-transform/core';
 import { getPrimitiveVertexCount, VertexCountMethod } from './get-vertex-count.js';
 import { EMPTY_U32 } from './hash-table.js';
-import { createIndices, createIndicesEmpty, deepListAttributes, shallowCloneAccessor } from './utils.js';
+import { copyVertex, createIndices, createIndicesEmpty, deepListAttributes, shallowCloneAccessor } from './utils.js';
 
 /**
  * Rewrites a {@link Primitive} such that all unused vertices in its vertex
@@ -131,9 +131,7 @@ export function compactAttribute(
 		const dstIndex = remap[srcIndex];
 		if (dstDone[dstIndex]) continue;
 
-		for (let j = 0; j < elementSize; j++) {
-			dstArray[dstIndex * elementSize + j] = srcArray[srcIndex * elementSize + j];
-		}
+		copyVertex(srcArray, srcIndex, dstArray, dstIndex, elementSize);
 
 		dstDone[dstIndex] = 1;
 	}

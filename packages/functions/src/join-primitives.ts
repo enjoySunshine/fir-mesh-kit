@@ -7,6 +7,7 @@ import {
 } from '@gltf-transform/core';
 import {
 	assignDefaults,
+	copyVertex,
 	createIndicesEmpty,
 	createPrimGroupKey,
 	getPrimitiveRestartIndex,
@@ -157,9 +158,7 @@ function remapAttribute(
 		const dstIndex = remap[srcIndex];
 		if (done[dstIndex]) continue;
 
-		for (let j = 0; j < elementSize; j++) {
-			dstArray[dstIndex * elementSize + j] = srcArray[srcIndex * elementSize + j];
-		}
+		copyVertex(srcArray, srcIndex, dstArray, dstIndex, elementSize);
 
 		done[dstIndex] = 1;
 	}
